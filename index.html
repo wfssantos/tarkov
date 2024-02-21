@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distance Calculator</title>
+<style>#map,#mapWrapper{position:relative}#distanceLabel,#lineCanvas,.point{position:absolute}#lineCanvas,#map,#mapContainer{width:100%;height:100%}#mapContainer{justify-content:center;align-items:center;border:2px solid #999}#mapWrapper{width:800px;height:1389px}#map{z-index:0}.point{width:10px;height:10px;background-color:red;border-radius:50%;cursor:pointer}#distanceLabel{top:10px;left:10px;background-color:#fff;padding:5px;border:1px solid #ccc;z-index:1}#lineCanvas{top:0;left:0;z-index:2}</style>
+</head>
+<body>
+<div id="options">
+    <select id="mapOptions" onchange="changeMap()">
+	<option value="Lighthouse">Lighthouse</option>
+        <option value="Reserve">Reserve</option>        
+        <option value="Custom">Custom</option>
+        <option value="Woods">Woods</option>
+        <option value="Shoreline">Shoreline</option>
+        <!--<option value="Street">Street</option>
+        <option value="Interchange">Interchange</option>
+        <option value="GroundZero">Ground Zero</option>-->
+    </select>
+</div>
+<div id="mapContainer">
+    <div id="mapWrapper">
+        <h2 id="distanceLabel">Distance Calculator</h2>
+        <div id="map">
+            <img src="lighthouse.png" alt="Map" id="mapImage" width="800" height="1389">
+        </div>
+        <canvas id="lineCanvas"></canvas>
+    </div>
+</div>
+<script>function changeMap(){clearPoints();let e=document.getElementById("mapOptions").value,t=e.toLowerCase()+".png";switch(document.getElementById("mapImage").src=t,e){case"Reserve":document.getElementById("mapImage").style.width="800px",document.getElementById("mapImage").style.height="474px";break;case"Lighthouse":document.getElementById("mapImage").style.width="800px",document.getElementById("mapImage").style.height="1389px";break;case"Street":document.getElementById("mapImage").style.width="800px",document.getElementById("mapImage").style.height="617px";break;case"Custom":document.getElementById("mapImage").style.width="800px",document.getElementById("mapImage").style.height="419px";break;case"Woods":document.getElementById("mapImage").style.width="800px",document.getElementById("mapImage").style.height="783px";break;case"Interchange":document.getElementById("mapImage").style.width="800px",document.getElementById("mapImage").style.height="867px";break;case"Shoreline":document.getElementById("mapImage").style.width="800px",document.getElementById("mapImage").style.height="548px";break;case"Ground Zero":document.getElementById("mapImage").style.width="800px",document.getElementById("mapImage").style.height="800px"}}let mapWrapper=document.getElementById("mapWrapper"),mapImage=document.getElementById("mapImage"),distanceLabel=document.getElementById("distanceLabel"),canvas=document.getElementById("lineCanvas"),ctx=canvas.getContext("2d"),point1Coords={},point2Coords={};function calculateDistance(){let e=point2Coords.x-point1Coords.x,t=point2Coords.y-point1Coords.y,a=Math.sqrt(e*e+t*t),n=0;switch(document.getElementById("mapOptions").value){case"Reserve":n=a/260*300;break;case"Lighthouse":n=a/222*300;break;case"Custom":n=a/227*300;break;case"Woods":n=a/155*300;break;case"Shoreline":n=a/124*300}distanceLabel.textContent=`Distance: ${n.toFixed(2)} meters`}function createPoint(e,t){let a=document.createElement("div");a.style.left=e-5+"px",a.style.top=t-5+"px",a.classList.add("point"),mapWrapper.appendChild(a)}function clearPoints(){document.querySelectorAll(".point").forEach((e=>e.remove())),distanceLabel.textContent="Distance Calculator"}mapWrapper.addEventListener("click",(function(e){let t=mapWrapper.getBoundingClientRect(),a=e.clientX-t.left,n=e.clientY-t.top;point1Coords.x?point2Coords.x?(point1Coords={},point2Coords={},distanceLabel.textContent="Distance Calculator",clearPoints()):(point2Coords={x:a,y:n},createPoint(a,n),calculateDistance()):(point1Coords={x:a,y:n},createPoint(a,n))}));</script>
+</body>
+</html>
